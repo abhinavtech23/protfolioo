@@ -1,0 +1,38 @@
+{
+  "name": "abhinav-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "gsap": "^3.12.7",
+    "@gsap/react": "^2.1.1",
+    "framer-motion": "^12.12.1",
+    "three": "^0.172.0",
+    "@react-three/fiber": "^9.1.2",
+    "@react-three/drei": "^10.0.4",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.0",
+    "howler": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.172.0",
+    "@types/howler": "^2.2.12",
+    "typescript": "^5.8.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "eslint": "^9.25.0",
+    "eslint-config-next": "^15.3.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}
