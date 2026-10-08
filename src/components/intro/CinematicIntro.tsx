@@ -377,6 +377,21 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         </div>
       )}
 
+      {/* Skip button */}
+      <button
+        onClick={() => {
+          try {
+            flipbookSoundRef.current?.stop();
+            boomSoundRef.current?.stop();
+            sheenSoundRef.current?.stop();
+          } catch {}
+          onComplete();
+        }}
+        className="absolute top-6 right-6 z-50 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider text-neutral-400 hover:text-white glass-apple border border-white/10 hover:border-white/30 transition-all cursor-pointer pointer-events-auto"
+      >
+        Skip ✕
+      </button>
+
       {/* SVG Container holding the Marvel logo replication */}
       {imagesLoaded && (
         <svg

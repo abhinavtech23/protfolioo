@@ -1,73 +1,54 @@
 "use client";
 
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { EDUCATION, AWARDS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-
-const Scene3DBackground = dynamic(
-  () => import("@/components/ui/Scene3DBackground"),
-  { ssr: false, loading: () => null }
-);
 
 export default function AcademicsSection() {
   return (
-    <section id="academics" className="relative w-full h-full flex flex-col justify-start overflow-y-auto pr-1 no-scrollbar pb-6">
-      {/* 3D Particles + Constellation Background */}
-      <Scene3DBackground
-        variant="particles-constellation"
-        particleCount={120}
-        particleColor="#4A0000"
-        lineColor="#2A2A2A"
-        spread={9}
-        showRings
-      />
+    <section id="academics" className="relative w-full">
       <div className="relative z-10 max-w-5xl mx-auto w-full">
         <SectionHeading
-          title="Academics & Triumphs"
-          subtitle="Academic foundation and competitive achievements."
+          badge="Credentials & Honors"
+          title="Academics & Competitive Triumphs"
+          subtitle="Engineering foundation and proven excellence across competitive hackathons and innovations."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Education Card */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Education Card (5 cols) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={cn(
-              "rounded-2xl border border-steel/20 bg-obsidian-lighter/50 backdrop-blur-sm p-6 sm:p-8",
-              "transition-all duration-500 hover:border-steel/30",
-              "hover:shadow-lg hover:shadow-crimson/5"
-            )}
+            className="lg:col-span-5 rounded-2xl p-6 sm:p-7 glass-apple-card glass-apple-card-hover"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-2xl">🎓</span>
-              <h3 className="font-cinzel text-xs tracking-[0.25em] text-crimson uppercase font-semibold">
-                Education
-              </h3>
+            <div className="flex items-center gap-2.5 mb-4">
+              <span className="text-xl">🎓</span>
+              <span className="text-[11px] font-mono tracking-widest text-rose-400 uppercase font-semibold">
+                ACADEMIC DEGREE
+              </span>
             </div>
 
-            <h4 className="font-cinzel text-lg sm:text-xl font-bold text-ivory tracking-wide leading-tight">
+            <h4 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-tight">
               {EDUCATION.degree}
             </h4>
-            <p className="font-inter text-sm text-ivory-muted mt-1">
+            <p className="text-sm text-neutral-300 mt-1">
               {EDUCATION.field}
             </p>
 
-            <div className="mt-4 pt-4 border-t border-steel/15">
-              <p className="font-inter text-xs sm:text-sm text-steel-lighter leading-relaxed">
+            <div className="mt-5 pt-4 border-t border-white/[0.08]">
+              <p className="text-xs text-neutral-400 leading-relaxed">
                 {EDUCATION.university}
               </p>
-              <p className="font-inter text-[10px] text-crimson/70 mt-1.5 tracking-wider uppercase">
+              <div className="mt-3 inline-block px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider text-rose-300 bg-rose-500/10 border border-rose-500/20 uppercase">
                 {EDUCATION.expectedGraduation}
-              </p>
+              </div>
             </div>
           </motion.div>
 
-          {/* Awards Column */}
-          <div className="space-y-3.5">
+          {/* Awards Column (7 cols) */}
+          <div className="lg:col-span-7 space-y-3">
             {AWARDS.map((award, i) => (
               <motion.div
                 key={award.title}
@@ -76,27 +57,16 @@ export default function AcademicsSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{
                   duration: 0.5,
-                  delay: i * 0.12,
+                  delay: i * 0.1,
                   ease: "easeOut",
                 }}
-                className={cn(
-                  "group rounded-2xl border border-steel/20 bg-obsidian-lighter/50 backdrop-blur-sm p-4 sm:p-5",
-                  "transition-all duration-500 hover:border-steel/30",
-                  "hover:-translate-y-0.5 hover:shadow-lg hover:shadow-crimson/5"
-                )}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "0 0 20px rgba(139, 0, 0, 0.12)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "none";
-                }}
+                className="group rounded-2xl p-4 sm:p-5 glass-apple-card glass-apple-card-hover"
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-xl flex-shrink-0 mt-0.5">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-105 group-hover:border-rose-400/30 transition-all">
                     {award.icon}
-                  </span>
-                  <p className="font-inter text-xs sm:text-sm text-ivory leading-relaxed">
+                  </div>
+                  <p className="text-xs sm:text-sm font-medium text-white group-hover:text-rose-200 transition-colors leading-relaxed">
                     {award.title}
                   </p>
                 </div>

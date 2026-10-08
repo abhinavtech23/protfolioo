@@ -22,11 +22,28 @@ export const MONTAGE_IMAGES: string[] = [
 
 // ----- HERO -----
 export const HERO = {
+  name: "Abhinav Tiwari",
+  badge: "Available for AI/ML, SWE & App Dev Roles",
+  title: "Software Engineer & AI Systems Developer",
   headline:
-    "EL'28 | Flutter Developer | Machine Learning | Cross-platform App Architecture | Hardware-Software Integration.",
+    "Engineering intelligent software architectures, high-performance mobile apps, and real-time AI inference pipelines.",
   subheadline:
-    "Architecting end-to-end systems spanning IoT hardware-software co-design, real-time concurrent pipelines, and cloud-connected backends.",
+    "Specializing in production-ready AI/ML integration, cross-platform Flutter systems, and concurrent scalable backends that solve critical problems.",
   resumePath: "/resume/Abhinav_Tiwari_Resume.pdf",
+  stats: [
+    { value: "9×", label: "Hackathon Finalist" },
+    { value: "4+", label: "Flagship Systems" },
+    { value: "1st", label: "IPR Award Winner" },
+    { value: "Top 10", label: "HackData Finalist" },
+  ],
+  skillsList: [
+    "AI / Deep Learning",
+    "Flutter Architecture",
+    "Full-Stack Python",
+    "Concurrent Systems",
+    "Next.js / TypeScript",
+    "Cloud & APIs",
+  ],
 } as const;
 
 // ----- TECH ARSENAL -----
@@ -39,28 +56,49 @@ export interface SkillCategory {
 
 export const TECH_ARSENAL: SkillCategory[] = [
   {
-    title: "Languages",
-    icon: "⟨/⟩",
-    items: ["Python", "C", "C++", "Dart", "JavaScript", "HTML/CSS"],
+    title: "AI & Machine Learning",
+    icon: "◈",
+    items: [
+      "TensorFlow",
+      "Keras",
+      "Computer Vision (OpenCV)",
+      "Predictive Modeling",
+      "OCR & NLP Pipelines",
+      "Model Optimization",
+    ],
     span: "large",
   },
   {
-    title: "Systems & Hardware",
-    icon: "⚙",
-    items: ["Concurrency", "Multi-threading", "ESP32", "NodeMCU"],
-    span: "medium",
-  },
-  {
-    title: "AI / Machine Learning",
-    icon: "◈",
-    items: ["Computer Vision (OpenCV)", "TensorFlow", "Keras"],
-    span: "medium",
-  },
-  {
-    title: "Web & Mobile",
+    title: "Mobile & Web Engineering",
     icon: "◻",
-    items: ["Flutter", "Firebase", "Flask", "Node.js", "Riverpod"],
+    items: [
+      "Flutter",
+      "Dart",
+      "Riverpod & Bloc",
+      "Next.js",
+      "React",
+      "TailwindCSS",
+    ],
     span: "medium",
+  },
+  {
+    title: "Core Languages",
+    icon: "⟨/⟩",
+    items: ["Python", "C++", "C", "Dart", "JavaScript / TS", "SQL"],
+    span: "medium",
+  },
+  {
+    title: "Backend & Systems",
+    icon: "⚙",
+    items: [
+      "FastAPI & Flask",
+      "Node.js",
+      "Firebase",
+      "Concurrency & Multi-Threading",
+      "RESTful APIs",
+      "Edge Computing Integration",
+    ],
+    span: "large",
   },
 ];
 

@@ -31,8 +31,8 @@ export default function Home() {
         transition={{ duration: 0.7 }}
       >
         {/* Hero — full viewport height */}
-        <section className="relative w-full h-screen">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 h-full pt-20 sm:pt-24">
+        <section className="relative w-full min-h-screen flex items-center">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 w-full pt-20 sm:pt-24 pb-12">
             <HeroSection />
           </div>
         </section>

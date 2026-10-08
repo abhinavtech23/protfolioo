@@ -1,25 +1,19 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import dynamic from "next/dynamic";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { TECH_ARSENAL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-const Scene3DBackground = dynamic(
-  () => import("@/components/ui/Scene3DBackground"),
-  { ssr: false, loading: () => null }
-);
-
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  hidden: { opacity: 0, y: 30, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.6,
-      delay: i * 0.15,
+      duration: 0.5,
+      delay: i * 0.1,
       ease: "easeOut",
     },
   }),
@@ -27,19 +21,12 @@ const cardVariants: Variants = {
 
 export default function TechArsenal() {
   return (
-    <section id="arsenal" className="relative w-full h-full flex flex-col justify-start overflow-y-auto pr-1 no-scrollbar pb-6">
-      {/* 3D Particle Background */}
-      <Scene3DBackground
-        variant="particles"
-        particleCount={200}
-        particleColor="#5C0000"
-        spread={12}
-      />
-
+    <section id="arsenal" className="relative w-full">
       <div className="relative z-10 w-full">
         <SectionHeading
+          badge="Core Stack & Toolkit"
           title="Technical Arsenal"
-          subtitle="A curated stack of technologies forged through production-grade projects and systems engineering."
+          subtitle="Curated technologies across AI, full-stack software development, cross-platform architecture, and concurrent backends."
         />
 
         {/* Bento Grid */}
@@ -53,45 +40,23 @@ export default function TechArsenal() {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               className={cn(
-                "group relative rounded-2xl border border-steel/20 bg-obsidian-lighter/50 backdrop-blur-sm p-5 sm:p-6",
-                "transition-all duration-500 ease-out",
-                "hover:-translate-y-0.5 hover:border-steel/40",
-                // Span logic for bento layout
+                "group relative rounded-2xl p-6 sm:p-7 glass-apple-card glass-apple-card-hover",
                 category.span === "large" && "sm:col-span-2",
                 category.span === "medium" && "col-span-1"
               )}
-              style={{ willChange: "transform" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 0 25px rgba(139, 0, 0, 0.15), 0 0 50px rgba(139, 0, 0, 0.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "none";
-              }}
             >
-              {/* Animated border glow on hover */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                style={{
-                  background:
-                    "conic-gradient(from 0turn, transparent 25%, rgba(139,0,0,0.3) 50%, transparent 75%)",
-                  padding: "1px",
-                  mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMask:
-                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
-                  animation: "border-rotate 4s linear infinite",
-                }}
-              />
-
-              {/* Category icon */}
-              <div className="text-xl sm:text-2xl mb-3 text-crimson opacity-80 group-hover:opacity-100 transition-opacity">
-                {category.icon}
+              {/* Header inside card */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-lg text-rose-300 group-hover:scale-105 group-hover:border-rose-400/30 transition-all">
+                  {category.icon}
+                </div>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
+                  {category.items.length} Techs
+                </span>
               </div>
 
               {/* Title */}
-              <h3 className="font-cinzel text-base sm:text-lg font-semibold text-ivory mb-3 tracking-wide">
+              <h3 className="text-base sm:text-lg font-bold text-white mb-4 tracking-tight group-hover:text-rose-200 transition-colors">
                 {category.title}
               </h3>
 
@@ -101,11 +66,11 @@ export default function TechArsenal() {
                   <span
                     key={item}
                     className={cn(
-                      "inline-block px-3 py-1.5 text-xs font-inter",
-                      "rounded-lg border border-steel/25 bg-obsidian/60",
-                      "text-ivory-muted tracking-wide",
+                      "inline-block px-3 py-1.5 text-xs font-mono",
+                      "rounded-lg border border-white/[0.08] bg-white/[0.03]",
+                      "text-neutral-300 tracking-wide",
                       "transition-all duration-300",
-                      "hover:border-crimson/40 hover:text-ivory hover:bg-crimson/10"
+                      "hover:border-crimson/50 hover:text-white hover:bg-crimson/15 hover:scale-[1.02]"
                     )}
                   >
                     {item}

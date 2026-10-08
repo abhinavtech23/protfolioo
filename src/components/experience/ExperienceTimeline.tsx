@@ -1,46 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { EXPERIENCES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-const Scene3DBackground = dynamic(
-  () => import("@/components/ui/Scene3DBackground"),
-  { ssr: false, loading: () => null }
-);
-
 export default function ExperienceTimeline() {
   return (
-    <section id="experience" className="relative w-full h-full flex flex-col justify-start overflow-y-auto pr-1 no-scrollbar pb-6">
-      {/* 3D Minimal Particles Background */}
-      <Scene3DBackground
-        variant="minimal"
-        particleCount={100}
-        particleColor="#3A0000"
-        spread={10}
-      />
-
+    <section id="experience" className="relative w-full">
       <div className="relative z-10 max-w-4xl mx-auto w-full">
         <SectionHeading
+          badge="Track Record"
           title="Experience & Leadership"
-          subtitle="Professional milestones and community leadership in the developer ecosystem."
+          subtitle="Software development track record, systems engineering milestones, and developer community contributions."
         />
 
         {/* Vertical timeline */}
         <div className="relative">
           {/* Glowing vertical line */}
           <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-[2px]">
-            <div className="w-full h-full bg-gradient-to-b from-crimson/60 via-crimson/30 to-steel/10" />
-            {/* Animated pulse overlay */}
+            <div className="w-full h-full bg-gradient-to-b from-crimson via-rose-500/40 to-white/10" />
             <motion.div
               className="absolute top-0 left-0 w-full bg-gradient-to-b from-crimson to-transparent"
               initial={{ height: "0%" }}
               whileInView={{ height: "100%" }}
               viewport={{ once: true }}
-              transition={{ duration: 2, ease: "easeOut" }}
-              style={{ boxShadow: "0 0 10px rgba(139, 0, 0, 0.4)" }}
+              transition={{ duration: 1.8, ease: "easeOut" }}
+              style={{ boxShadow: "0 0 12px rgba(139, 0, 0, 0.6)" }}
             />
           </div>
 
@@ -53,8 +39,8 @@ export default function ExperienceTimeline() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{
-                  duration: 0.6,
-                  delay: i * 0.15,
+                  duration: 0.5,
+                  delay: i * 0.12,
                   ease: "easeOut",
                 }}
                 className="relative pl-12 sm:pl-20"
@@ -62,49 +48,43 @@ export default function ExperienceTimeline() {
                 {/* Timeline node */}
                 <div
                   className={cn(
-                    "absolute left-2.5 sm:left-6.5 top-1.5 w-3.5 h-3.5 rounded-full border-2",
-                    "bg-obsidian transition-all duration-300",
+                    "absolute left-2.5 sm:left-6.5 top-2 w-3.5 h-3.5 rounded-full border-2",
+                    "bg-neutral-950 transition-all duration-300",
                     i === 0
-                      ? "border-crimson shadow-[0_0_10px_rgba(139,0,0,0.5)]"
-                      : "border-steel/50"
+                      ? "border-crimson shadow-[0_0_12px_rgba(220,38,38,0.7)]"
+                      : "border-white/30"
                   )}
                 />
 
                 {/* Content card */}
-                <div
-                  className={cn(
-                    "rounded-2xl border border-steel/15 bg-obsidian-lighter/40 backdrop-blur-sm p-5 sm:p-6",
-                    "transition-all duration-500 hover:border-steel/30",
-                    "hover:shadow-lg hover:shadow-crimson/5"
-                  )}
-                >
+                <div className="rounded-2xl p-6 sm:p-7 glass-apple-card glass-apple-card-hover">
                   {/* Period badge */}
-                  <span className="inline-block px-2.5 py-0.5 text-[9px] font-inter tracking-widest text-crimson/80 border border-crimson/20 rounded-full uppercase mb-2">
+                  <span className="inline-block px-3 py-1 text-[10px] font-mono tracking-wider text-rose-300 bg-rose-500/10 border border-rose-500/20 rounded-full uppercase mb-3">
                     {exp.period}
                   </span>
 
                   {/* Role & Org */}
-                  <h3 className="font-cinzel text-base sm:text-lg font-bold text-ivory tracking-wide">
+                  <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
                     {exp.role}
                   </h3>
-                  <p className="font-inter text-xs text-crimson/70 mt-0.5 tracking-wide">
+                  <p className="text-xs sm:text-sm text-rose-400 mt-0.5 font-medium tracking-wide">
                     {exp.organization}
                   </p>
 
                   {/* Description */}
-                  <p className="font-inter text-xs sm:text-sm text-ivory-muted mt-3 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-neutral-300 mt-3 leading-relaxed">
                     {exp.description}
                   </p>
 
                   {/* Highlights */}
-                  <ul className="mt-3 space-y-1.5">
+                  <ul className="mt-3.5 space-y-1.5">
                     {exp.highlights.map((h, j) => (
                       <li
                         key={j}
-                        className="flex items-start gap-2 text-xs font-inter text-steel-lighter"
+                        className="flex items-start gap-2.5 text-xs text-neutral-400"
                       >
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-crimson/50 flex-shrink-0" />
-                        {h}
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-crimson-light flex-shrink-0" />
+                        <span>{h}</span>
                       </li>
                     ))}
                   </ul>

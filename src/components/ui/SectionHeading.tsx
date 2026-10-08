@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 interface SectionHeadingProps {
   title: string;
   subtitle?: string;
+  badge?: string;
   className?: string;
   align?: "left" | "center";
 }
@@ -13,13 +14,14 @@ interface SectionHeadingProps {
 export default function SectionHeading({
   title,
   subtitle,
+  badge,
   className,
   align = "center",
 }: SectionHeadingProps) {
   return (
     <motion.div
       className={cn(
-        "mb-6 sm:mb-8",
+        "mb-10 sm:mb-12",
         align === "center" && "text-center",
         className
       )}
@@ -28,18 +30,27 @@ export default function SectionHeading({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
+      {badge && (
+        <div className="mb-2.5">
+          <span className="inline-block px-3 py-1 rounded-full text-[11px] font-mono tracking-wider text-rose-300 bg-rose-500/10 border border-rose-500/20 uppercase">
+            {badge}
+          </span>
+        </div>
+      )}
+
       <h2
         className={cn(
-          "font-cinzel text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-ivory",
+          "text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white",
           "relative inline-block"
         )}
       >
-        {title}
-        {/* Crimson underline accent */}
-        <span className="absolute -bottom-2 left-0 h-[1.5px] w-full bg-gradient-to-r from-transparent via-crimson to-transparent" />
+        <span className="bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">
+          {title}
+        </span>
       </h2>
+
       {subtitle && (
-        <p className="mt-3 text-xs sm:text-sm text-ivory-muted max-w-2xl mx-auto font-inter leading-relaxed">
+        <p className="mt-3 text-xs sm:text-sm text-neutral-400 max-w-2xl mx-auto leading-relaxed font-normal">
           {subtitle}
         </p>
       )}

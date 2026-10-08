@@ -1,45 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { HERO } from "@/lib/constants";
-
-// Dynamic import to avoid SSR issues with Three.js
-const Particles = dynamic(() => import("@/components/ui/particles"), {
-  ssr: false,
-  loading: () => null,
-});
-
-const headlineWords = HERO.headline.split(" ");
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.06,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const wordVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    filter: "blur(4px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.5,
-      ease: "easeOut" as const,
-    },
-  },
-};
+import HeroVisualShowcase from "./HeroVisualShowcase";
 
 export default function HeroSection() {
   const scrollToProjects = () => {
@@ -49,99 +12,151 @@ export default function HeroSection() {
     }
   };
 
+  const scrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
-    <section
+    <div
       id="hero"
-      className="relative w-full h-full flex items-center justify-center overflow-hidden"
+      className="relative w-full min-h-[calc(100vh-5rem)] flex items-center justify-center py-8 lg:py-0"
     >
-      {/* Full-screen Particles Background */}
-      <div className="absolute inset-0 z-0">
-        <Suspense fallback={null}>
-          <Particles
-            color="#8B0000"
-            particleCount={10000}
-            animate={true}
-            className="opacity-60"
-          />
-        </Suspense>
-      </div>
+      {/* Ambient background lighting */}
+      <div className="absolute -top-24 left-1/4 w-[500px] h-[500px] bg-crimson/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 right-10 w-[450px] h-[450px] bg-red-950/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute inset-0 tech-grid opacity-40 pointer-events-none" />
 
-      {/* Subtle radial crimson glow overlay */}
-      <div
-        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none z-[1]"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,0,0,0.06) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Content Layer — sits above 3D */}
-      <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pointer-events-none">
-        {/* Left: Text content (spans 7 cols) */}
-        <div className="lg:col-span-7 space-y-6 text-left pointer-events-auto">
-          {/* Headline — word-by-word staggered reveal */}
-          <motion.h1
-            className="font-cinzel text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem] font-bold leading-normal tracking-wide text-ivory"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {headlineWords.map((word, i) => (
-              <motion.span
-                key={i}
-                variants={wordVariants}
-                className="inline-block mr-[0.25em]"
-                style={{
-                  color:
-                    word === "|"
-                      ? "#8B0000"
-                      : undefined,
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            className="font-inter text-sm sm:text-base text-ivory-muted leading-relaxed max-w-xl"
-            initial={{ opacity: 0, y: 15 }}
+      {/* Main Grid: 2 Columns */}
+      <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        {/* Left Column: Typography & CTAs (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col justify-center space-y-6 text-left">
+          {/* Status Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="flex items-center"
+          >
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-apple border border-emerald-500/25 text-emerald-400 text-xs font-medium tracking-wide shadow-sm">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span>{HERO.badge}</span>
+            </div>
+          </motion.div>
+
+          {/* Name & Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+            className="space-y-3"
+          >
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
+              Hi, I&apos;m{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-100 to-rose-300">
+                {HERO.name}
+              </span>
+            </h1>
+
+            <p className="text-lg sm:text-2xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 via-rose-300 to-crimson-light">
+              {HERO.title}
+            </p>
+          </motion.div>
+
+          {/* Subheadline / Bio */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+            className="text-sm sm:text-base text-neutral-300/90 leading-relaxed max-w-xl font-normal"
           >
             {HERO.subheadline}
           </motion.p>
 
-          {/* CTAs */}
+          {/* Core Tech Stack Badges */}
           <motion.div
-            className="flex flex-wrap gap-4 pt-2"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+            className="flex flex-wrap gap-2 pt-1"
+          >
+            {HERO.skillsList.map((skill) => (
+              <span
+                key={skill}
+                className="px-2.5 py-1 text-xs font-mono rounded-lg bg-white/[0.04] text-neutral-300 border border-white/[0.08] hover:border-crimson/40 hover:bg-crimson/10 transition-colors"
+              >
+                {skill}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Action CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+            className="flex flex-wrap items-center gap-3.5 pt-2"
           >
             <button
               onClick={scrollToProjects}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-crimson text-ivory font-inter text-xs sm:text-sm font-medium tracking-wider rounded-lg cursor-pointer transition-all duration-300 hover:bg-crimson-light hover:shadow-lg hover:shadow-crimson/20 hover:scale-[1.02]"
+              className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-crimson via-red-800 to-crimson-light text-white font-medium text-xs sm:text-sm tracking-wide shadow-lg shadow-crimson/25 hover:shadow-crimson/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
             >
-              View Projects
-              <span className="text-xs">→</span>
+              <span>Explore Projects</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-300">
+                →
+              </span>
             </button>
+
             <a
               href={HERO.resumePath}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-steel/40 text-ivory-muted font-inter text-xs sm:text-sm font-medium tracking-wider rounded-lg transition-all duration-300 hover:border-ivory/40 hover:text-ivory hover:bg-white/5 hover:scale-[1.02]"
+              className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-xl glass-apple text-neutral-200 font-medium text-xs sm:text-sm tracking-wide border border-white/10 hover:border-white/25 hover:text-white hover:bg-white/[0.06] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              Download Resume
-              <span className="text-xs">↗</span>
+              <span>View Resume</span>
+              <span className="text-neutral-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                ↗
+              </span>
             </a>
+
+            <button
+              onClick={scrollToContact}
+              className="inline-flex items-center gap-1.5 px-4 py-3.5 text-xs sm:text-sm font-medium text-neutral-400 hover:text-white transition-colors cursor-pointer"
+            >
+              Get in Touch
+            </button>
+          </motion.div>
+
+          {/* Impact Stats Row */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
+            className="pt-4 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-xl"
+          >
+            {HERO.stats.map((stat) => (
+              <div key={stat.label} className="space-y-0.5">
+                <div className="text-lg sm:text-xl font-bold font-mono text-white tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="text-[11px] text-neutral-400 font-medium leading-tight">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </motion.div>
         </div>
 
-        {/* Right side intentionally empty — 3D fills background */}
-        <div className="lg:col-span-5 hidden lg:block" />
+        {/* Right Column: Interactive 3D & Telemetry Showcase (5 cols) */}
+        <div className="lg:col-span-5 w-full flex items-center justify-center">
+          <HeroVisualShowcase />
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

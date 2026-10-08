@@ -15,106 +15,105 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      initial={{ opacity: 0, y: 30, scale: 0.96 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-30px" }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
       onClick={() => setExpanded(!expanded)}
       className={cn(
-        "group relative rounded-2xl border cursor-pointer",
-        "backdrop-blur-md bg-obsidian-lighter/40",
-        "transition-all duration-500 ease-out overflow-hidden",
-        expanded
-          ? "border-crimson/30 shadow-[0_0_30px_rgba(139,0,0,0.12)]"
-          : "border-steel/15 hover:border-steel/30 hover:shadow-[0_0_20px_rgba(139,0,0,0.08)]",
-        "hover:-translate-y-0.5"
+        "group relative rounded-2xl cursor-pointer p-5 sm:p-6",
+        "glass-apple-card glass-apple-card-hover overflow-hidden",
+        expanded && "border-rose-500/40 shadow-2xl shadow-crimson/20"
       )}
     >
-      {/* Subtle top gradient accent */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-crimson/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Top subtle glow */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-crimson-light/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      <div className="p-4 sm:p-5">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="font-inter text-[10px] text-crimson tracking-widest uppercase font-medium">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div className="h-[1px] w-6 bg-crimson/30" />
-            </div>
-
-            <h3 className="font-cinzel text-base sm:text-lg font-bold text-ivory tracking-wide">
-              {project.name}
-            </h3>
-            <p className="font-inter text-xs text-ivory-muted mt-1 line-clamp-2">
-              {project.tagline}
-            </p>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] font-mono text-rose-400 tracking-widest uppercase font-semibold">
+              PROJECT {String(index + 1).padStart(2, "0")}
+            </span>
+            <div className="h-[1px] w-8 bg-rose-500/30" />
           </div>
 
-          {/* Expand indicator */}
-          <motion.div
-            animate={{ rotate: expanded ? 45 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex-shrink-0 w-6 h-6 rounded-full border border-steel/25 flex items-center justify-center text-steel-light group-hover:border-crimson/40 group-hover:text-crimson transition-colors text-xs"
+          <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight group-hover:text-rose-200 transition-colors">
+            {project.name}
+          </h3>
+          <p className="text-xs sm:text-sm text-neutral-300 mt-1 line-clamp-2 leading-relaxed">
+            {project.tagline}
+          </p>
+        </div>
+
+        {/* Expand / Collapse Indicator */}
+        <motion.div
+          animate={{ rotate: expanded ? 45 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex-shrink-0 w-7 h-7 rounded-full glass-apple flex items-center justify-center text-neutral-300 group-hover:border-rose-400/40 group-hover:text-white transition-colors text-sm font-light"
+        >
+          +
+        </motion.div>
+      </div>
+
+      {/* Tech stack pills */}
+      <div className="flex flex-wrap gap-1.5 mt-4">
+        {project.techStack.map((tech) => (
+          <span
+            key={tech}
+            className="px-2.5 py-1 text-[11px] font-mono tracking-wide rounded-lg border border-white/[0.08] text-neutral-300 bg-white/[0.03] group-hover:border-white/[0.12] transition-colors"
           >
-            +
-          </motion.div>
-        </div>
+            {tech}
+          </span>
+        ))}
+      </div>
 
-        {/* Tech stack pills */}
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {project.techStack.slice(0, 4).map((tech) => (
-            <span
-              key={tech}
-              className="px-2 py-0.5 text-[9px] font-inter tracking-wider rounded-md border border-crimson/15 text-steel-lighter bg-crimson/5 uppercase"
-            >
-              {tech}
-            </span>
-          ))}
-          {project.techStack.length > 4 && (
-            <span className="px-2 py-0.5 text-[9px] font-inter tracking-wider rounded-md border border-steel/15 text-steel-lighter uppercase">
-              +{project.techStack.length - 4}
-            </span>
-          )}
-        </div>
+      {/* Expandable Details */}
+      <AnimatePresence mode="wait">
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4 pt-4 border-t border-white/[0.08] space-y-3.5">
+              <p className="text-xs sm:text-sm leading-relaxed text-neutral-300/90 font-normal">
+                {project.description}
+              </p>
 
-        {/* Expandable Details */}
-        <AnimatePresence mode="wait">
-          {expanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="overflow-hidden"
-            >
-              <div className="mt-3 pt-3 border-t border-steel/10 space-y-3">
-                <p className="font-inter text-xs leading-relaxed text-ivory-muted">
-                  {project.description}
-                </p>
-
+              <div className="space-y-2">
+                <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-wider block">
+                  Key Architectural Highlights:
+                </span>
                 <ul className="space-y-1.5">
                   {project.highlights.map((h, i) => (
                     <li
                       key={i}
-                      className="flex items-start gap-2 text-[11px] font-inter text-steel-lighter"
+                      className="flex items-start gap-2.5 text-xs text-neutral-300"
                     >
-                      <span className="mt-1 w-1 h-1 rounded-full bg-crimson/50 flex-shrink-0" />
-                      {h}
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-crimson-light flex-shrink-0" />
+                      <span>{h}</span>
                     </li>
                   ))}
                 </ul>
-
-                {project.teamCredits && (
-                  <p className="font-inter text-[10px] text-steel-light italic pt-2 border-t border-steel/10">
-                    {project.teamCredits}
-                  </p>
-                )}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+              {project.teamCredits && (
+                <p className="text-[11px] text-neutral-400 italic pt-2 border-t border-white/[0.06]">
+                  {project.teamCredits}
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="mt-4 pt-2 flex items-center justify-between text-[11px] font-mono text-neutral-500">
+        <span>{expanded ? "Click to collapse" : "Click to view architectural details"}</span>
+        <span>{expanded ? "▲" : "▼"}</span>
       </div>
     </motion.div>
   );

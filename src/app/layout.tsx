@@ -24,23 +24,24 @@ const oswald = Oswald({
 
 
 export const metadata: Metadata = {
-  title: "Abhinav Tiwari — Systems Architect & Flutter Developer",
+  title: "Abhinav Tiwari — Software Engineer & AI Systems Developer",
   description:
-    "Portfolio of Abhinav Tiwari — EL'28 | Flutter Developer | Machine Learning | Cross-platform App Architecture | Hardware-Software Integration. Architecting end-to-end systems spanning IoT hardware-software co-design, real-time concurrent pipelines, and cloud-connected backends.",
+    "Portfolio of Abhinav Tiwari — Software Engineer specializing in AI/ML systems, cross-platform mobile applications (Flutter), and concurrent scalable backends.",
   keywords: [
     "Abhinav Tiwari",
-    "Flutter Developer",
+    "Software Engineer",
+    "AI Engineer",
     "Machine Learning",
-    "IoT",
-    "ESP32",
+    "Flutter Developer",
     "Full Stack Developer",
+    "Systems Architect",
     "Portfolio",
   ],
   authors: [{ name: "Abhinav Tiwari" }],
   openGraph: {
-    title: "Abhinav Tiwari — Systems Architect & Flutter Developer",
+    title: "Abhinav Tiwari — Software Engineer & AI Systems Developer",
     description:
-      "Architecting end-to-end systems spanning IoT hardware-software co-design, real-time concurrent pipelines, and cloud-connected backends.",
+      "Specializing in production AI/ML integration, cross-platform Flutter systems, and concurrent scalable backends.",
     type: "website",
     locale: "en_US",
   },
