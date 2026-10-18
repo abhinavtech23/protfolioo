@@ -97,7 +97,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
 
       const tl = gsap.timeline({
         onComplete: () => {
-          // Fade out the black background to reveal the Hero
+          // Fade out the entire intro container to reveal the Hero
           gsap.to(containerRef.current, {
             opacity: 0,
             duration: 0.6,
@@ -293,35 +293,28 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         2.5
       );
 
-      // --- PHASE 4: Pullback & Translate to Navbar (3.6s - 5.0s) ---
+      // --- PHASE 4: Hold at center, then fade out (3.6s - 5.0s) ---
+      // Keep the resolved logo at the same scale & position (center of screen).
+      // Just hold for a beat, then fade out the whole container via onComplete.
       tl.to(
         svgRef.current,
         {
-          scale: 0.2,
-          x: () => {
-            const vw = window.innerWidth;
-            return (vw / 2) - (vw < 640 ? 100 : 170);
-          },
-          y: () => {
-            const vh = window.innerHeight;
-            return -(vh / 2) + (vh < 640 ? 30 : 40);
-          },
-          opacity: 0.9,
-          duration: 1.3,
-          ease: "power4.inOut",
+          scale: 1,
+          duration: 1.0,
+          ease: "none",
         },
         3.6
       );
 
-      // Quick fade out at the end of the timeline to handoff to Navbar
+      // Gentle fade of the SVG at the very end before the container fades
       tl.to(
         svgRef.current,
         {
           opacity: 0,
-          duration: 0.35,
-          ease: "power2.in",
+          duration: 0.5,
+          ease: "power2.inOut",
         },
-        4.65
+        4.4
       );
     },
     { scope: containerRef, dependencies: [imagesLoaded, onComplete] }
@@ -343,16 +336,6 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
             </span>
           </div>
         </div>
-      )}
-
-      {/* Skip button */}
-      {imagesLoaded && (
-        <button
-          onClick={onComplete}
-          className="absolute bottom-8 right-8 z-[110] font-inter text-xs tracking-widest text-steel-light/60 hover:text-ivory/80 transition-colors duration-300 uppercase"
-        >
-          Skip Intro →
-        </button>
       )}
 
       {/* Full-screen Background Photo Montage */}

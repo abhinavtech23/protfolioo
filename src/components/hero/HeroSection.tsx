@@ -22,12 +22,34 @@ export default function HeroSection() {
   return (
     <div
       id="hero"
-      className="relative w-full min-h-[calc(100vh-5rem)] flex items-center justify-center py-8 lg:py-0"
+      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center py-8 lg:py-0"
     >
       {/* Ambient background lighting */}
       <div className="absolute -top-24 left-1/4 w-[500px] h-[500px] bg-crimson/15 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 right-10 w-[450px] h-[450px] bg-red-950/20 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute inset-0 tech-grid opacity-40 pointer-events-none" />
+
+      {/* "HI I'm ABHINAV Tiwari" — slides down from top center */}
+      <motion.div
+        initial={{ opacity: 0, y: -60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.9,
+          delay: 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="relative z-20 text-center mb-8 lg:mb-12"
+      >
+        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
+          HI I&apos;m{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-100 to-rose-300">
+            ABHINAV
+          </span>{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-crimson to-crimson-light">
+            Tiwari
+          </span>
+        </h1>
+      </motion.div>
 
       {/* Main Grid: 2 Columns */}
       <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
@@ -37,7 +59,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
             className="flex items-center"
           >
             <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-apple border border-emerald-500/25 text-emerald-400 text-xs font-medium tracking-wide shadow-sm">
@@ -49,20 +71,13 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Name & Headline */}
+          {/* Title & Role */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
             className="space-y-3"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
-              Hi, I&apos;m{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-100 to-rose-300">
-                {HERO.name}
-              </span>
-            </h1>
-
             <p className="text-lg sm:text-2xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 via-rose-300 to-crimson-light">
               {HERO.title}
             </p>
@@ -72,7 +87,7 @@ export default function HeroSection() {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             className="text-sm sm:text-base text-neutral-300/90 leading-relaxed max-w-xl font-normal"
           >
             {HERO.subheadline}
@@ -82,7 +97,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
             className="flex flex-wrap gap-2 pt-1"
           >
             {HERO.skillsList.map((skill) => (
@@ -99,7 +114,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
             className="flex flex-wrap items-center gap-3.5 pt-2"
           >
             <button
@@ -136,7 +151,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.95, ease: "easeOut" }}
             className="pt-4 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-xl"
           >
             {HERO.stats.map((stat) => (
@@ -152,7 +167,7 @@ export default function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Right Column: Interactive 3D & Telemetry Showcase (5 cols) */}
+        {/* Right Column: Photo & Telemetry Showcase (5 cols) */}
         <div className="lg:col-span-5 w-full flex items-center justify-center">
           <HeroVisualShowcase />
         </div>
