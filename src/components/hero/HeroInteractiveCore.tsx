@@ -22,13 +22,13 @@ export default function HeroInteractiveCore() {
     scene = new THREE.Scene();
 
     // Camera
-    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.z = 18;
+    camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
+    camera.position.z = 22;
 
     // Renderer
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 4));
       renderer.setSize(width, height);
       renderer.setClearColor(0x000000, 0);
       container.appendChild(renderer.domElement);
