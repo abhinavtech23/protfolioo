@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { MONTAGE_IMAGES } from "@/lib/constants";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 
 gsap.registerPlugin(useGSAP);
 
@@ -29,34 +29,50 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
   const sheenSoundRef = useRef<Howl | null>(null);
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
 
-  // Preload all flipbook images
+  // Preload all flipbook images with progress balancer and timeout
   const preloadImages = useCallback(() => {
     let loaded = 0;
     const total = MONTAGE_IMAGES.length;
 
     if (total === 0) {
+      setLoadProgress(100);
       setImagesLoaded(true);
       return;
     }
+
+    // Safety timeout: Never hold the user longer than 1.1s even on slow connections
+    const timer = setTimeout(() => {
+      setLoadProgress(100);
+      setImagesLoaded(true);
+    }, 1100);
 
     MONTAGE_IMAGES.forEach((src) => {
       const img = new Image();
       img.onload = img.onerror = () => {
         loaded++;
+        const pct = Math.round((loaded / total) * 100);
+        setLoadProgress(pct);
         if (loaded >= total) {
+          clearTimeout(timer);
           setImagesLoaded(true);
         }
       };
       img.src = src;
     });
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    preloadImages();
+    const cleanup = preloadImages();
+    return () => {
+      if (cleanup) cleanup();
+    };
   }, [preloadImages]);
 
-  // Load high-fidelity audio files
+  // Load high-fidelity audio files safely
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -64,18 +80,24 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     flipbookSoundRef.current = new Howl({
       src: ["/audio/flipbook_sfx.mp3"],
       volume: 0.8,
+      html5: true,
+      onloaderror: () => {},
     });
 
     // Sub-bass Zimmer boom
     boomSoundRef.current = new Howl({
       src: ["/audio/cinematic_boom.mp3"],
       volume: 0.9,
+      html5: true,
+      onloaderror: () => {},
     });
 
     // Metallic sheen whoosh sweep
     sheenSoundRef.current = new Howl({
       src: ["/audio/metallic_sheen.mp3"],
       volume: 0.7,
+      html5: true,
+      onloaderror: () => {},
     });
 
     return () => {
@@ -91,8 +113,8 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
       if (!imagesLoaded || !containerRef.current || !svgRef.current || !backgroundRef.current) return;
 
       // Resume AudioContext if suspended by browser security policy
-      if (typeof window !== "undefined" && (window as any).Howler?.ctx?.resume) {
-        (window as any).Howler.ctx.resume().catch(() => {});
+      if (typeof window !== "undefined" && Howler.ctx && typeof Howler.ctx.resume === "function") {
+        Howler.ctx.resume().catch(() => {});
       }
 
       const tl = gsap.timeline({
@@ -107,7 +129,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         },
       });
 
-      // --- PHASE 1 & 2: The Flipbook Engine & Zoom Out (0s - 2.5s) ---
+      // --- PHASE 1 & 2: The Flipbook Engine & Zoom Out (0s - 1.7s) ---
       // Start with scale 2.4 (zoomed into the text) and pull back
       tl.fromTo(
         svgRef.current,
@@ -115,7 +137,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         {
           scale: 1,
           rotate: 0,
-          duration: 2.8,
+          duration: 2.0,
           ease: "power3.out",
         },
         0
@@ -137,7 +159,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         {
           volume: 0.05,
           rate: 0.5,
-          duration: 2.5,
+          duration: 1.7,
           ease: "power2.out",
           onUpdate: () => {
             if (flipbookSoundRef.current) {
@@ -153,12 +175,12 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
       );
 
       // Rapidly toggle the full-screen background images
-      const switchCount = 38;
-      const totalMontageDuration = 2.5;
+      const switchCount = 30;
+      const totalMontageDuration = 1.7;
 
       for (let i = 0; i < switchCount; i++) {
         const progress = i / switchCount;
-        const time = Math.pow(progress, 2.8) * totalMontageDuration;
+        const time = Math.pow(progress, 2.5) * totalMontageDuration;
 
         tl.call(
           () => {
@@ -172,7 +194,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                   gsap.fromTo(
                     img,
                     { scale: 1.15 },
-                    { scale: 1.0, duration: 0.25, ease: "power1.out" }
+                    { scale: 1.0, duration: 0.22, ease: "power1.out" }
                   );
                 } else {
                   gsap.set(img, { opacity: 0 });
@@ -190,7 +212,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
               {
                 scale: 1.0,
                 filter: "brightness(1.0)",
-                duration: 0.12,
+                duration: 0.1,
                 ease: "power2.out",
               }
             );
@@ -200,16 +222,16 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         );
       }
 
-      // --- PHASE 3: Color Bleed, Solidification & Light Sweep (2.5s - 3.5s) ---
+      // --- PHASE 3: Color Bleed, Solidification & Light Sweep (1.7s - 2.5s) ---
       // Fade out full screen background images to black
       tl.to(
         backgroundRef.current,
         {
           opacity: 0,
-          duration: 0.8,
+          duration: 0.6,
           ease: "power2.inOut",
         },
-        2.5
+        1.7
       );
 
       // Resolve ABHINAV text to white steel and box to crimson
@@ -217,10 +239,10 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         resolveLayerRef.current,
         {
           opacity: 1,
-          duration: 0.4,
+          duration: 0.35,
           ease: "power2.inOut",
         },
-        2.5
+        1.7
       );
 
       tl.to(
@@ -228,10 +250,10 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         {
           fill: "#8B0000",
           stroke: "#ffffff",
-          duration: 0.4,
+          duration: 0.35,
           ease: "power2.inOut",
         },
-        2.5
+        1.7
       );
 
       // Trigger sub-bass Zimmer boom
@@ -240,7 +262,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
           boomSoundRef.current?.play();
         },
         [],
-        2.5
+        1.7
       );
 
       // Fade in the right side: TIWARI + Border lines
@@ -250,10 +272,10 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         {
           opacity: 1,
           x: 0,
-          duration: 0.6,
+          duration: 0.5,
           ease: "power2.out",
         },
-        2.6
+        1.8
       );
 
       // Trigger metallic sheen whoosh
@@ -261,11 +283,11 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         () => {
           if (sheenSoundRef.current) {
             sheenSoundRef.current.play();
-            sheenSoundRef.current.fade(0.7, 0, 1800);
+            sheenSoundRef.current.fade(0.7, 0, 1500);
           }
         },
         [],
-        2.7
+        1.9
       );
 
       // Trigger the shiny white light sweep across the resolved text
@@ -274,10 +296,10 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         { x: -1000 },
         {
           x: 1000,
-          duration: 1.2,
+          duration: 1.0,
           ease: "power2.inOut",
         },
-        2.8
+        1.9
       );
 
       // Accentuate the resolve with a slight scale bump
@@ -285,25 +307,23 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         svgRef.current,
         {
           scale: 1.03,
-          duration: 0.15,
+          duration: 0.12,
           yoyo: true,
           repeat: 1,
           ease: "power2.out",
         },
-        2.5
+        1.7
       );
 
-      // --- PHASE 4: Hold at center, then fade out (3.6s - 5.0s) ---
-      // Keep the resolved logo at the same scale & position (center of screen).
-      // Just hold for a beat, then fade out the whole container via onComplete.
+      // --- PHASE 4: Hold at center, then fade out (2.5s - 3.2s) ---
       tl.to(
         svgRef.current,
         {
           scale: 1,
-          duration: 1.0,
+          duration: 0.6,
           ease: "none",
         },
-        3.6
+        2.4
       );
 
       // Gentle fade of the SVG at the very end before the container fades
@@ -311,10 +331,10 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         svgRef.current,
         {
           opacity: 0,
-          duration: 0.5,
+          duration: 0.4,
           ease: "power2.inOut",
         },
-        4.4
+        2.8
       );
     },
     { scope: containerRef, dependencies: [imagesLoaded, onComplete] }
@@ -326,14 +346,42 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
       className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden"
       aria-hidden="true"
     >
-      {/* Loading state indicator (shown only if assets are preloading) */}
+      {/* High-Performance Load Balancer & Visual Asset Streamer */}
       {!imagesLoaded && (
-        <div className="absolute inset-0 bg-black flex flex-col items-center justify-center z-[120]">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-2 border-steel/20 border-t-crimson rounded-full animate-spin" />
-            <span className="font-inter text-xs tracking-wider text-steel-light uppercase">
-              Loading Systems...
-            </span>
+        <div className="absolute inset-0 bg-black flex flex-col items-center justify-center z-[120] px-6 select-none">
+          <div className="w-full max-w-sm sm:max-w-md p-6 rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-2xl flex flex-col gap-4 shadow-2xl shadow-crimson/20">
+            {/* Header telemetry */}
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-neutral-400">
+              <span className="flex items-center gap-2 text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
+                LOAD BALANCER: ACTIVE
+              </span>
+              <span className="text-neutral-500 text-[10px]">EDGE CDN · POOL-01</span>
+            </div>
+
+            {/* Title / Status */}
+            <div>
+              <div className="text-xs font-mono uppercase text-neutral-200 tracking-wider">
+                Synchronizing High-Performance Assets
+              </div>
+              <div className="text-[11px] text-neutral-400 mt-0.5">
+                Balancing stream cache & rendering pipeline
+              </div>
+            </div>
+
+            {/* Balanced Progress Track */}
+            <div className="relative w-full h-2 rounded-full bg-white/5 overflow-hidden border border-white/10">
+              <div
+                className="h-full bg-gradient-to-r from-crimson via-rose-500 to-white transition-all duration-200 ease-out shadow-[0_0_12px_rgba(225,29,72,0.8)]"
+                style={{ width: `${Math.max(loadProgress, 12)}%` }}
+              />
+            </div>
+
+            {/* Telemetry metrics */}
+            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400 pt-1 border-t border-white/5">
+              <span>LATENCY: OPTIMAL (BALANCED)</span>
+              <span className="text-white font-semibold">{loadProgress}%</span>
+            </div>
           </div>
         </div>
       )}

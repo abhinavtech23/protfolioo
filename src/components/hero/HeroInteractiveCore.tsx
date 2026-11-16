@@ -11,18 +11,16 @@ export default function HeroInteractiveCore() {
     if (!container) return;
 
     let renderer: THREE.WebGLRenderer;
-    let scene: THREE.Scene;
-    let camera: THREE.PerspectiveCamera;
     let animId: number;
 
     const width = container.clientWidth || 500;
     const height = container.clientHeight || 500;
 
     // Scene
-    scene = new THREE.Scene();
+    const scene = new THREE.Scene();
 
     // Camera
-    camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 1000);
     camera.position.z = 22;
 
     // Renderer

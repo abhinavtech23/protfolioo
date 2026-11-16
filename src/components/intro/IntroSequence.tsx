@@ -19,7 +19,6 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
   const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Preload all montage images
   const preloadImages = useCallback(() => {
@@ -76,7 +75,6 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
         tl.call(
           () => {
             const currentImgIdx = i % MONTAGE_IMAGES.length;
-            setCurrentImageIndex(currentImgIdx);
 
             // Toggle background image visibility
             imageRefs.current.forEach((img, idx) => {
